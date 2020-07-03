@@ -33,29 +33,30 @@ void splitLineOfCountry(string const line, string countryArray []){
     countryArray[2] = newLine.substr(space,len);
 };
 
+void readCountryFile(ifstream &file, struct country countries[]){
+    string countryArray[3];
+    string line;
+    int i;
+    for (i = 0; i < MAX_COUNTRY; i++) {
+        getline(file, line);
+        splitLineOfCountry(line, countryArray);
+        countries[i].countryName = countryArray[0];
+        countries[i].continent = countryArray[1];
+        countries[i].people = atoi(countryArray[2].c_str());
+        countries[i].print();
+    };
+}
+
 
 int main() {
     ifstream MyReadFile("/home/manu/UTN/TP1New/Paises.txt");
-    string line;
-    country countrys[MAX_COUNTRY];
-    string countryArray[3];
-    int i;
-
+    country countries[MAX_COUNTRY];
     cout << "Generando Archivos..." << endl;
-
-    if (MyReadFile.is_open()){
-        for ( i = 0; i < MAX_COUNTRY; i++ ){
-            getline(MyReadFile,line);
-            splitLineOfCountry(line, countryArray);
-            countrys[i].countryName = countryArray[0];
-            countrys[i].continent = countryArray[1];
-            countrys[i].people = atoi(countryArray[2].c_str());
-            countrys[i].print();
-        };
-        MyReadFile.close();
+    if (MyReadFile.is_open()) {
+        readCountryFile(MyReadFile, countries);
     } else {
-
-        cout << "Unable to open file";
+        cout << "No se pudo abrir el archivo";
     }
+    MyReadFile.close();
     return 0;
 }
